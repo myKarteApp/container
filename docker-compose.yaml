@@ -7,7 +7,6 @@ services:
       context: ./InfraLayer/proxy
     volumes:
       - ./InfraLayer/proxy/ssl:/etc/nginx/ssl
-      # - ./InfraLayer/proxy/static:/usr/share/nginx/static
       - ./appLayer/client/project/dist:/usr/share/nginx/static
 
     ports:
@@ -18,7 +17,16 @@ services:
       - PROXY_ALLOWED_IP=${PROXY_ALLOWED_IP}
     networks:
       - appNet
-
+  
+  # # キャッシュ層
+  # cache:
+  #   image: redis:latest
+  #   container_name: cache
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - ./InfraLayer/cache:/data
+  
   # アプリ層
   client:
     container_name: client
@@ -28,7 +36,7 @@ services:
     volumes:
       - ./appLayer/client:/usr/app
     ports:
-      - "3000:3000"
+      - "${LOCAL_FRONT_PORT}:3000"
       - "3001:3001"
     networks:
       - appNet
@@ -41,38 +49,42 @@ services:
     volumes:
       - ./appLayer/backend:/usr/app
     ports:
-      - "${BACK_PORT}:${BACK_PORT}"
+      - "${BACK_PORT}:4000"
+      - "${PRISMA_PORT}:5555"
     networks:
       - appNet
-      # - dbNet
+      - dbNet
 
+  # リソース層
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ}
+    volumes:
+      - ./InfraLayer/db/mysql/sql:/docker-entrypoint-initdb.d
+      - ./appLayer/backend/project/prisma/migrations:/migrations
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - dbNet
 
-  # # リソース層
-  # mysql:
-  #   container_name: mysql
-  #   image: mysql:latest
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
-  #     MYSQL_USER: ${MYSQL_USER}
-  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  #   volumes:
-  #     - ./infra/db/mysql/init:/docker-entrypoint-initdb.d
-  #   networks:
-  #     - dbNet
-
-  # mongodb:
-  #   container_name: mongodb
-  #   image: mongo:latest
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-  #   volumes:
-  #     - ./infra/db/mongodb/init:/docker-entrypoint-initdb.d
-  #   networks:
-  #     - dbNet
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./InfraLayer/db/mongodb/init:/docker-entrypoint-initdb.d
+    networks:
+      - dbNet
 
 networks:
   appNet:

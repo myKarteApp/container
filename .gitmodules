@@ -1,9 +1,9 @@
 [submodule "InfraLayer"]
 	path = InfraLayer
 	url = https://github.com/myKarteApp/InfraLayer.git
-[submodule "appLayer/client"]
-	path = appLayer/client
-	url = https://github.com/myKarteApp/client.git
+# [submodule "appLayer/client"]
+# 	path = appLayer/client
+# 	url = https://github.com/myKarteApp/client.git
 [submodule "appLayer/backend"]
 	path = appLayer/backend
 	url = https://github.com/myKarteApp/backend.git

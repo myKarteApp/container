@@ -1,7 +1,7 @@
 type Error = {
-    [key: string]: string;
-  };
-  
+  [key: string]: string;
+};
+
 export class Validator {
   error: Error = {};
   constructor() {
@@ -35,4 +35,3 @@ export const validatePassword = (validator: Validator, password?: string) => {
     validator.pushError('email', 'passwordを入力してください。');
   }
 };
-  

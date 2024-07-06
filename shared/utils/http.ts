@@ -1,4 +1,3 @@
-
 export enum TimezoneOffset {
   UTC = 0,
   JST = 9,

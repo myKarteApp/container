@@ -27,19 +27,19 @@ services:
   #   volumes:
   #     - ./InfraLayer/cache:/data
   
-  # アプリ層
-  client:
-    container_name: client
-    tty: true
-    build:
-      context: ./appLayer/client
-    volumes:
-      - ./appLayer/client:/usr/app
-    ports:
-      - "${LOCAL_FRONT_PORT}:3000"
-      - "3001:3001"
-    networks:
-      - appNet
+  # # アプリ層
+  # client:
+  #   container_name: client
+  #   tty: true
+  #   build:
+  #     context: ./appLayer/client
+  #   volumes:
+  #     - ./appLayer/client:/usr/app
+  #   ports:
+  #     - "${LOCAL_FRONT_PORT}:3000"
+  #     - "3001:3001"
+  #   networks:
+  #     - appNet
 
   backend:
     container_name: backend

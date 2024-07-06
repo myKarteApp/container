@@ -45,8 +45,14 @@ export type LoginDefaultAuthDto = CreateDefaultAuthDto;
 
 export const validateDefaultAuth = (
   dto: Partial<CreateDefaultAuthDto | LoginDefaultAuthDto>,
+  _validator?: Validator,
 ): Validator => {
-  const validator = new Validator();
+  let validator;
+  if (_validator) {
+    validator = _validator;
+  } else {
+    validator = new Validator();
+  }
   validateEmail(validator, dto.email);
   validatePassword(validator, dto.password);
   return validator;

@@ -17,11 +17,11 @@ export enum HttpMethod {
 
 export type ApiSchemaInfo = {
   /*
-      AdminAccount: /admin/{userId}/account
+      AdminAccount: /admin/:userId/account
       userIdは自身のモノ。
     */
   createAccountByAdmin: {
-    endpoint: '/admin/{userId}/account/create';
+    endpoint: '/admin/:userId/account/create';
     method: HttpMethod.POST;
     request: {
       body: CreateAccountInfoDto;
@@ -37,7 +37,7 @@ export type ApiSchemaInfo = {
     };
   };
   getAccountListByAdmin: {
-    endpoint: '/admin/{userId}/account';
+    endpoint: '/admin/:userId/account';
     method: HttpMethod.GET;
     request: {
       body: never;
@@ -53,7 +53,7 @@ export type ApiSchemaInfo = {
     };
   };
   getAccountDetailByAdmin: {
-    endpoint: '/admin/{userId}/account/{targetUserId}';
+    endpoint: '/admin/:userId/account/:targetUserId';
     method: HttpMethod.GET;
     request: {
       body: never;
@@ -69,7 +69,7 @@ export type ApiSchemaInfo = {
     };
   };
   updateAccountByAdmin: {
-    endpoint: '/admin/{userId}/account/{targetUserId}/update';
+    endpoint: '/admin/:userId/account/:targetUserId/update';
     method: HttpMethod.PUT;
     request: {
       body: Partial<CreateAccountInfoDto>;
@@ -81,7 +81,7 @@ export type ApiSchemaInfo = {
     };
   };
   deleteAccountByAdmin: {
-    endpoint: '/admin/{userId}/account/{targetUserId}/delete';
+    endpoint: '/admin/:userId/account/:targetUserId/delete';
     method: HttpMethod.DELETE;
     request: {
       body: never;
@@ -93,7 +93,7 @@ export type ApiSchemaInfo = {
     };
   };
   bulkDeleteAccountByAdmin: {
-    endpoint: '/admin/{userId}/account/bulkDelete';
+    endpoint: '/admin/:userId/account/bulkDelete';
     method: HttpMethod.POST;
     request: {
       body: UserIdListDto;
@@ -151,11 +151,11 @@ export type ApiSchemaInfo = {
     };
   };
   /*
-    AccountUser: /account/user
+    AccountUser: /account/:authId/
     自身のユーザー情報を作成する
 */
   createAccountUser: {
-    endpoint: '/account/user/:authId/create';
+    endpoint: '/account/:authId/user/create';
     method: HttpMethod.POST;
     request: {
       body: CreateUserInfoDto;
@@ -174,7 +174,7 @@ export type ApiSchemaInfo = {
       認証情報を承認する
     */
   confirmRegistration: {
-    endpoint: '/account/auth/verify?queryToken={token}';
+    endpoint: '/account/auth/verify';
     query: {
       queryToken: string;
     };
